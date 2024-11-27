@@ -13,6 +13,7 @@ import 'package:checkofficer/widgets/widget_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class Authen extends StatefulWidget {
   const Authen({super.key});
@@ -92,7 +93,7 @@ class _AuthenState extends State<Authen> {
                               'https://tswg.site/app/getUserWhereUser.php?isAdd=true&user=$user';
 
                           print('urlApi ---> $urlApi');
-                          await Dio().get(urlApi).then((value) {
+                          await Dio().get(urlApi).then((value) async {
                             print('value ---> $value');
 
                             if (value.toString() == 'null') {
@@ -104,9 +105,12 @@ class _AuthenState extends State<Authen> {
                             } else {
                               for (var element in json.decode(value.data)) {
                                 UserModel model = UserModel.fromMap(element);
-                                print('model string ===> ${model.toString()}');
+                                print(
+                                    '## model string ===> ${model.toString()}');
                                 if (password == model.password) {
                                   //Password true
+
+                                  await GetStorage().write('api', int.parse(model.api.trim())).then((value) => print('## GetStroage Success'),);
 
                                   appController.indexApi.value =
                                       int.parse(model.api.trim());

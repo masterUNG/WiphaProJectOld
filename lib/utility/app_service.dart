@@ -21,6 +21,7 @@ import 'package:dio/dio.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'package:image/image.dart' as image;
 
@@ -29,6 +30,14 @@ import 'package:screenshot/screenshot.dart';
 
 class AppService {
   AppController appController = Get.put(AppController());
+
+  Future<void> setupIndexApi() async {
+    var indexApi = await GetStorage().read('api');
+
+    if (indexApi != null) {
+      appController.indexApi.value = indexApi;
+    }
+  }
 
   String displayDateTime({required String dateTimeString}) {
     var strings = dateTimeString.split(' ');
@@ -87,16 +96,16 @@ class AppService {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          children: [ 
-              WidgetText(
+          children: [
+            WidgetText(
               data: 'หมู่บ้านเพอร์เฟค',
               textStyle: AppConstant().h4Style(color: Colors.black, size: 12),
             ),
-               WidgetText(
+            WidgetText(
               data: 'โคโลเนียล รามคำแหง',
               textStyle: AppConstant().h3Style(color: Colors.black, size: 12),
             ),
-              WidgetText(
+            WidgetText(
               data: 'รายละเอียดข้อมูลการติดต่อ',
               textStyle: AppConstant().h5Style(color: Colors.black, size: 10),
             ),
@@ -179,7 +188,7 @@ class AppService {
       final myImage = image.decodeImage(value);
       bytes += generator.image(myImage!);
 
-      bytes += generator.qrcode(guestModel.id!,size: QRSize.Size6);
+      bytes += generator.qrcode(guestModel.id!, size: QRSize.Size6);
 
       bytes += generator.text('\n\n\n\n\n');
 
@@ -249,7 +258,8 @@ class AppService {
     required String carId,
     required String province,
     required String objective,
-    required String remark, required String cartype,
+    required String remark,
+    required String cartype,
   }) async {
     String urlApiUpload = 'https://tswg.site/app/saveFile.php';
 
@@ -296,7 +306,8 @@ class AppService {
     }
 
     if (urlImages.isNotEmpty) {
-      String urlApiInsertGuest = '${AppConstant.apiInsertGuests[appController.indexApi.value]}$nameAndSurname&phone=$phone&carId=$carId&province=$province&cartype=$cartype&objective=$objective&urlImage1=${urlImages[0]}&urlImage2=${urlImages[1]}&urlImage3=${urlImages[2]}&checkIn=${DateTime.now().toString()}&remark=$remark';
+      String urlApiInsertGuest =
+          '${AppConstant.apiInsertGuests[appController.indexApi.value]}$nameAndSurname&phone=$phone&carId=$carId&province=$province&cartype=$cartype&objective=$objective&urlImage1=${urlImages[0]}&urlImage2=${urlImages[1]}&urlImage3=${urlImages[2]}&checkIn=${DateTime.now().toString()}&remark=$remark';
       print('##7nov urlApiInsert --> $urlApiInsertGuest');
       await dio.Dio().get(urlApiInsertGuest).then((value) {
         Get.back();
