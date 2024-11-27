@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, avoid_print
 import 'package:checkofficer/utility/app_controller.dart';
-import 'package:checkofficer/utility/app_dialog.dart';
 import 'package:checkofficer/utility/app_service.dart';
 import 'package:checkofficer/widgets/widget_button.dart';
 import 'package:checkofficer/widgets/widget_icon_button.dart';
@@ -14,9 +13,9 @@ import 'package:get/get.dart';
 
 class Detail extends StatefulWidget {
   const Detail({
-    Key? key,
+    super.key,
     required this.guestModel,
-  }) : super(key: key);
+  });
 
   final GuestModel guestModel;
 

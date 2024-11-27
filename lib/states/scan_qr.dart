@@ -1,6 +1,5 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
-import 'package:checkofficer/states/detail_after_scan.dart';
 import 'package:checkofficer/utility/app_controller.dart';
 import 'package:checkofficer/utility/app_dialog.dart';
 import 'package:checkofficer/utility/app_service.dart';
